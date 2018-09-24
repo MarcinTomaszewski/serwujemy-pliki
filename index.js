@@ -20,9 +20,11 @@ server.on('request', function (request, response){
     
     } else {                                                    
         response.statusCode = 404;
-        response.setHeader("Content-Type", "text/html; charset=utf-8");
-        response.write('<h1>404: Zła ścieżka!</h1>');
-        response.end();
+        response.setHeader("Content-Type", "image/jpeg");
+        fs.readFile('./blad.jpg', function (err, data) {
+            response.write(data);                 
+            response.end();
+        }); 
     }
 });
 
