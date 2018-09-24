@@ -3,15 +3,24 @@ var fs = require('fs');
 
 var server = http.createServer();
 server.on('request', function (request, response){
-    response.setHeader("Content-Type", "text/html; charset=utf-8");
-    if (request.method === 'GET' && request.url === '/h') {        
+    
+    if (request.method === 'GET' && request.url === '/h') {     
+        response.setHeader("Content-Type", "text/html; charset=utf-8");   
         fs.readFile('./index.html', 'utf-8', function (err, data){
-            console.log(data);                                      //mam problem z wysłaniem zawartości pliku index.html, zeby wyświetlił się na stronie po podaniu url. Wyświetla się w consoli ale nie w oknie przeglądarki. Jakieś wskazówki mile widziane :)
+            response.write(data);                                      
+            response.end();
         });    
             
-        response.end();
-    } else {                                                    //i taki sam problem z wyświetleniem zdjęcia w oknie przeglądarki. 
+    } else if (request.method === 'GET' && request.url === '/style.css') {
+        response.setHeader("Content-Type", "text/css; charset=utf-8"); 
+        fs.readFile('./style.css', 'utf-8', function (err, data) {
+            response.write(data);       
+            response.end();
+        });
+    
+    } else {                                                    
         response.statusCode = 404;
+        response.setHeader("Content-Type", "text/html; charset=utf-8");
         response.write('<h1>404: Zła ścieżka!</h1>');
         response.end();
     }
